@@ -29,7 +29,7 @@ class SignupSerializer(serializers.ModelSerializer):
             })
         return data
 
-    # 序列器内部会调用这个方法然后作为.save()的返回，validated_data也是验证过的数据
+    # 重载ModelSerializer的create方法作为save()的返回，validated_data也是验证过的数据
     def create(self, validated_data):
         username = validated_data['username'].lower()
         email = validated_data['email'].lower()
