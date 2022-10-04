@@ -27,6 +27,8 @@ class UserViewSet(viewsets.ModelViewSet):
 # 白名单模式
 class AccountViewSet(viewsets.ViewSet):
     permissions_classes = (AllowAny, )
+    # 可以获得构造序列
+    serializer_class = SignupSerializer
     # action可以控制一些api的参数，methods指定了哪些是可以的，detail=False表示这个请求可以不用带id，不是对象接口，是普通接口，直接访问url
     @action(methods=['POST'], detail=False)
     def login(self, request):
