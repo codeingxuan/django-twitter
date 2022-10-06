@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from tweets.models import Tweet
 
-class NewsFeeds(models.Model):
+class NewsFeed(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
