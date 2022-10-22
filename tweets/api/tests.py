@@ -67,7 +67,6 @@ class TweetApiTests(TestCase):
         self.assertEqual(response.data['user']['id'], self.user1.id)
         self.assertEqual(Tweet.objects.count(), tweets_count + 1)
 
-
     def test_retrieve(self):
         # tweet with id=-1 does not exist
         url = TWEET_RETRIEVE_API.format(-1)
@@ -83,6 +82,5 @@ class TweetApiTests(TestCase):
 
         self.create_comment(self.user2, tweet, 'holly s***')
         self.create_comment(self.user1, tweet, 'hmm...')
-        self.create_comment(self.user1, self.create_tweet(self.user2), '...')
         response = self.anonymous_client.get(url)
         self.assertEqual(len(response.data['comments']), 2)
