@@ -1,4 +1,11 @@
-from accounts.api.serializers import UserSerializer
+from accounts.api.serializers import (
+    LoginSerializer,
+    SignupSerializer,
+    UserProfileSerializerForUpdate,
+    UserSerializer,
+    UserSerializerWithProfile,
+)
+from accounts.models import UserProfile
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework import viewsets
@@ -10,7 +17,7 @@ from django.contrib.auth import (
     login as django_login,
     logout as django_logout,
 )
-from accounts.api.serializers import SignupSerializer, LoginSerializer
+from utils.permissions import IsObjectOwner
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -20,11 +27,11 @@ class UserViewSet(viewsets.ModelViewSet):
     # 大概是类似于数据从哪里获得的，本来应该是sql语句
     queryset = User.objects.all().order_by('-date_joined')
     # 序列类型，参照序列构造的类 serialize，定义了数据构建的形式
-    serializer_class = UserSerializer
+    serializer_class = UserSerializerWithProfile
     # 权限的参数，这里的意思是必须要是授权用户才可以发这个请求
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAdminUser,)
 
-# 白名单模式
+
 class AccountViewSet(viewsets.ViewSet):
     permissions_classes = (AllowAny, )
     # 可以获得构造序列
@@ -106,3 +113,13 @@ class AccountViewSet(viewsets.ViewSet):
 
         # Response默认的状态码是200
         return Response(data)
+
+
+class UserProfileViewSet(
+    viewsets.GenericViewSet,
+    viewsets.mixins.UpdateModelMixin,
+):
+    # PUT /api/profiles/<id>/
+    queryset = UserProfile
+    permission_classes = (permissions.IsAuthenticated, IsObjectOwner,)
+    serializer_class = UserProfileSerializerForUpdate
