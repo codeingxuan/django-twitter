@@ -7,6 +7,7 @@ class FriendshipServiceTests(TestCase):
 
     def setUp(self):
         self.clear_cache()
+        self.clear_cache()
         self.linghu = self.create_user('linghu')
         self.dongxie = self.create_user('dongxie')
 
